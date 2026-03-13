@@ -1,0 +1,1 @@
+---@alias gl.DebugMessageCallback fun(source: number, type: number, id: number, severity: number, length: number, message: string)
