@@ -1,0 +1,18 @@
+{
+	"name": "glapi",
+	"version": "0.1.0",
+	"dependencies": {
+		"x11api": {
+			"git": "https://github.com/codebycruz/x11api",
+			"optional": true
+		},
+		"winapi": {
+			"git": "https://github.com/codebycruz/winapi",
+			"optional": true
+		}
+	},
+	"features": {
+		"windows": ["winapi"],
+		"linux": ["x11api"]
+	}
+}

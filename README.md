@@ -7,8 +7,8 @@ Cross-platform low level OpenGL bindings for LuaJIT.
 
 ## Installation
 
-This is intended to be consumed with the [lpm](https://github.com/codebycruz/lpm) package manager.
+Use this package with the [lde](https://lde.sh/) package manager.
 
 ```bash
-lpm add --git https://github.com/codebycruz/hood
+lde add --git https://github.com/codebycruz/glapi
 ```
