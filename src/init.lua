@@ -41,6 +41,8 @@ local nonCoreFnDefs = {
 	glCreateVertexArrays = "void(*)(GLsizei, GLuint*)",
 
 	glCreateBuffers = "void(*)(GLsizei, GLuint*)",
+	glDeleteBuffers = "void(*)(GLsizei, const GLuint*)",
+	glBindBuffer = "void(*)(GLenum, GLuint)",
 	glNamedBufferData = "void(*)(GLuint, GLsizeiptr, const void*, GLenum)",
 	glNamedBufferSubData = "void(*)(GLuint, GLintptr, GLsizeiptr, const void*)",
 
@@ -53,6 +55,7 @@ local nonCoreFnDefs = {
 	glTextureSubImage3D = "void(*)(GLuint, GLsizei, GLint, GLint, GLint, GLsizei, GLsizei, GLsizei, GLenum, GLenum, const void*)",
 	glBindTextureUnit = "void(*)(GLuint, GLuint)",
 	glCopyImageSubData = "void(*)(GLuint, GLenum, GLint, GLint, GLint, GLint, GLuint, GLenum, GLint, GLint, GLint, GLint, GLsizei, GLsizei, GLsizei)",
+	glGetTextureSubImage = "void(*)(GLuint, GLint, GLint, GLint, GLint, GLsizei, GLsizei, GLsizei, GLenum, GLenum, GLsizei, void*)",
 
 	glBindBufferBase = "void(*)(GLenum, GLuint, GLuint)",
 
@@ -180,16 +183,22 @@ gl.bindProgramPipeline = C.glBindProgramPipeline
 ---@type fun(program: number)
 gl.deleteProgram = C.glDeleteProgram
 
----@type fun(n: number, pipelines: userdata)
+---@type fun(n: number, pipelines: ffi.cdata*)
 gl.deleteProgramPipelines = C.glDeleteProgramPipelines
 
----@type fun(n: number, buffers: userdata)
+---@type fun(n: number, buffers: ffi.cdata*)
 gl.createBuffers = C.glCreateBuffers
 
----@type fun(buffer: number, size: number, data: userdata?, usage: number)
+---@type fun(buffer: number, size: number, data: ffi.cdata*?, usage: number)
 gl.namedBufferData = C.glNamedBufferData
 
----@type fun(buffer: number, offset: number, size: number, data: userdata)
+---@type fun(n: number, buffers: ffi.cdata*)
+gl.destroyBuffers = C.glDeleteBuffers
+
+---@type fun(target: number, buffer: number)
+gl.bindBuffer = C.glBindBuffer
+
+---@type fun(buffer: number, offset: number, size: number, data: ffi.cdata*)
 gl.namedBufferSubData = C.glNamedBufferSubData
 
 ---@type fun(vaobj: number, bindingindex: number, buffer: number, offset: number, stride: number)
@@ -210,10 +219,10 @@ gl.vertexArrayAttribBinding = C.glVertexArrayAttribBinding
 ---@type fun(array: number)
 gl.bindVertexArray = C.glBindVertexArray
 
----@type fun(n: number, arrays: userdata)
+---@type fun(n: number, arrays: ffi.cdata*)
 gl.createVertexArrays = C.glCreateVertexArrays
 
----@type fun(mode: number, count: number, type: number, indices: userdata?)
+---@type fun(mode: number, count: number, type: number, indices: ffi.cdata*?)
 gl.drawElements = C.glDrawElements
 
 ---@type fun(name: number): string
@@ -222,7 +231,7 @@ gl.getString = function(name)
 	return ffi.string(str)
 end
 
----@type fun(pId: number, uId: number, v0: userdata)
+---@type fun(pId: number, uId: number, v0: ffi.cdata*)
 gl.programUniform1i = C.glProgramUniform1i
 
 ---@type fun(pId: number, uId: number, v0: number)
@@ -240,7 +249,7 @@ gl.programUniform3f = C.glProgramUniform3f
 ---@type fun(pId: number, uId: number, v0: number, v1: number, v2: number, v3: number)
 gl.programUniform4f = C.glProgramUniform4f
 
----@type fun(pId: number, uId: number, count: number, transpose: number, value: userdata)
+---@type fun(pId: number, uId: number, count: number, transpose: number, value: ffi.cdata*)
 gl.programUniformMatrix4fv = C.glProgramUniformMatrix4fv
 
 ---@type fun(target: number, n: number): number[]
@@ -259,20 +268,23 @@ end
 ---@type fun(texture: number, levels: number, internalformat: number, width: number)
 gl.textureStorage1D = C.glTextureStorage1D
 
----@type fun(texture: number, level: number, xoffset: number, width: number, format: number, type: number, pixels: userdata)
+---@type fun(texture: number, level: number, xoffset: number, width: number, format: number, type: number, pixels: ffi.cdata*)
 gl.textureSubImage1D = C.glTextureSubImage1D
 
 ---@type fun(texture: number, levels: number, internalformat: number, width: number, height: number)
 gl.textureStorage2D = C.glTextureStorage2D
 
----@type fun(texture: number, level: number, xoffset: number, yoffset: number, width: number, height: number, format: number, type: number, pixels: userdata)
+---@type fun(texture: number, level: number, xoffset: number, yoffset: number, width: number, height: number, format: number, type: number, pixels: ffi.cdata*)
 gl.textureSubImage2D = C.glTextureSubImage2D
 
 ---@type fun(texture: number, levels: number, internalformat: number, width: number, height: number, depth: number)
 gl.textureStorage3D = C.glTextureStorage3D
 
----@type fun(texture: number, level: number, xoffset: number, yoffset: number, zoffset: number, width: number, height: number, depth: number, format: number, type: number, pixels: userdata)
+---@type fun(texture: number, level: number, xoffset: number, yoffset: number, zoffset: number, width: number, height: number, depth: number, format: number, type: number, pixels: ffi.cdata*)
 gl.textureSubImage3D = C.glTextureSubImage3D
+
+---@type fun(texture: number, level: number, xoffset: number, yoffset: number, zoffset: number, width: number, height: number, depth: number, format: number, type: number, bufSize: number, pixels: ffi.cdata*)
+gl.getTextureSubImage = C.glGetTextureSubImage
 
 ---@type fun(unit: number, texture: number)
 gl.bindTextureUnit = C.glBindTextureUnit
@@ -332,7 +344,7 @@ gl.createFramebuffer = function()
 	return fboId[0]
 end
 
----@type fun(n: number, framebuffers: userdata)
+---@type fun(n: number, framebuffers: ffi.cdata*)
 gl.createFramebuffers = C.glCreateFramebuffers
 
 ---@type fun(framebuffer: number, attachment: number, texture: number, level: number)
@@ -347,7 +359,7 @@ gl.checkNamedFramebufferStatus = C.glCheckNamedFramebufferStatus
 ---@type fun(target: number, framebuffer: number)
 gl.bindFramebuffer = C.glBindFramebuffer
 
----@type fun(n: number, framebuffers: userdata)
+---@type fun(n: number, framebuffers: ffi.cdata*)
 gl.deleteFramebuffers = C.glDeleteFramebuffers
 
 ---@type fun(n: number): number[]

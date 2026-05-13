@@ -128,7 +128,8 @@ gl.TextureLodRange = {
 ---@enum gl.BufferTarget
 gl.BufferTarget = {
 	UniformBuffer = 0x8A11,
-	ShaderStorageBuffer = 0x90D2
+	ShaderStorageBuffer = 0x90D2,
+	PixelPackBuffer = 0x88EB
 }
 
 ---@enum gl.BarrierBit
@@ -169,6 +170,13 @@ gl.UnpackParam = {
 	UnpackAlignment = 0x0CF5,
 	UnpackRowLength = 0x0CF2,
 	UnpackImageHeight = 0x806E
+}
+
+---@enum gl.PackParam
+gl.PackParam = {
+	PackAlignment = 0x0D05,
+	PackRowLength = 0x0D02,
+	PackImageHeight = 0x806C
 }
 
 do
@@ -275,6 +283,12 @@ do
 	gl.UNPACK_ALIGNMENT = gl.UnpackParam.UnpackAlignment
 	gl.UNPACK_ROW_LENGTH = gl.UnpackParam.UnpackRowLength
 	gl.UNPACK_IMAGE_HEIGHT = gl.UnpackParam.UnpackImageHeight
+
+	gl.PACK_ALIGNMENT = gl.PackParam.PackAlignment
+	gl.PACK_ROW_LENGTH = gl.PackParam.PackRowLength
+	gl.PACK_IMAGE_HEIGHT = gl.PackParam.PackImageHeight
+
+	gl.PIXEL_PACK_BUFFER = gl.BufferTarget.PixelPackBuffer
 
 	gl.CULL_FACE = gl.Capability.CullFace
 end
