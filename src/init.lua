@@ -82,6 +82,9 @@ local nonCoreFnDefs = {
 	glPixelStorei = "void(*)(GLenum, GLint)",
 
 	glClearDepthf = "void(*)(GLfloat)",
+
+	glDebugMessageCallback = "void(*)(GLDEBUGPROC, const void*)",
+	glDebugMessageControl = "void(*)(GLenum, GLenum, GLenum, GLsizei, const GLuint*, unsigned char)",
 }
 
 ---@type fun(name: string): function
