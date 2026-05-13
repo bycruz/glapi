@@ -80,6 +80,8 @@ local nonCoreFnDefs = {
 	glIsBuffer = "GLboolean(*)(GLuint)",
 
 	glPixelStorei = "void(*)(GLenum, GLint)",
+
+	glClearDepthf = "void(*)(GLfloat)",
 }
 
 ---@type fun(name: string): function
