@@ -2,10 +2,16 @@ local ffi = require("ffi")
 
 ffi.cdef([[#embed "ffi/ffidefs.h"]])
 
----@class gl
+---@class gl: gl.RawEnums
 local gl = {}
 
+local glEnums = require("glapi.ffi.enums")
+for k, v in pairs(glEnums) do
+	gl[k] = v
+end
+
 ---@type table<string, string>
+---@format disable-next
 local nonCoreFnDefs = {
 	glCreateShaderProgramv = "GLuint(*)(GLenum, GLsizei, const GLchar**)",
 	glGetProgramiv = "void(*)(GLuint, GLenum, GLint*)",
@@ -44,11 +50,9 @@ local nonCoreFnDefs = {
 	glTextureStorage2D = "void(*)(GLuint, GLsizei, GLenum, GLsizei, GLsizei)",
 	glTextureSubImage2D = "void(*)(GLuint, GLsizei, GLint, GLint, GLsizei, GLsizei, GLenum, GLenum, const void*)",
 	glTextureStorage3D = "void(*)(GLuint, GLsizei, GLenum, GLsizei, GLsizei, GLsizei)",
-	glTextureSubImage3D =
-	"void(*)(GLuint, GLsizei, GLint, GLint, GLint, GLsizei, GLsizei, GLsizei, GLenum, GLenum, const void*)",
+	glTextureSubImage3D = "void(*)(GLuint, GLsizei, GLint, GLint, GLint, GLsizei, GLsizei, GLsizei, GLenum, GLenum, const void*)",
 	glBindTextureUnit = "void(*)(GLuint, GLuint)",
-	glCopyImageSubData =
-	"void(*)(GLuint, GLenum, GLint, GLint, GLint, GLint, GLuint, GLenum, GLint, GLint, GLint, GLint, GLsizei, GLsizei, GLsizei)",
+	glCopyImageSubData = "void(*)(GLuint, GLenum, GLint, GLint, GLint, GLint, GLuint, GLenum, GLint, GLint, GLint, GLint, GLsizei, GLsizei, GLsizei)",
 
 	glBindBufferBase = "void(*)(GLenum, GLuint, GLuint)",
 
@@ -408,5 +412,5 @@ return {
 	end,
 
 	---@type fun(pname: number, param: number)
-	pixelStorei = C.glPixelStorei,
+	pixelStorei = C.glPixelStorei
 }
