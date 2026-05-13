@@ -125,292 +125,294 @@ local coreFns =
 
 setmetatable(C, { __index = coreFns })
 
-return {
-	--- @param type gl.ShaderType
-	--- @param src string
-	--- @return number
-	createShaderProgram = function(type, src)
-		local srcs = ffi.new("const char*[1]", { src })
-		local program = C.glCreateShaderProgramv(type, 1, srcs)
+--- @param type gl.ShaderType
+--- @param src string
+--- @return number
+gl.createShaderProgram = function(type, src)
+	local srcs = ffi.new("const char*[1]", { src })
+	local program = C.glCreateShaderProgramv(type, 1, srcs)
 
-		local status = ffi.new("GLint[1]")
-		C.glGetProgramiv(program, 0x8B82 --[[GL_LINK_STATUS]], status)
+	local status = ffi.new("GLint[1]")
+	C.glGetProgramiv(program, 0x8B82 --[[GL_LINK_STATUS]], status)
 
-		if status[0] == 0 then
-			local infoLogLength = ffi.new("GLint[1]")
-			C.glGetProgramiv(program, 0x8B84 --[[GL_INFO_LOG_LENGTH]], infoLogLength)
+	if status[0] == 0 then
+		local infoLogLength = ffi.new("GLint[1]")
+		C.glGetProgramiv(program, 0x8B84 --[[GL_INFO_LOG_LENGTH]], infoLogLength)
 
-			local infoLog = ffi.new("GLchar[?]", infoLogLength[0])
-			C.glGetProgramInfoLog(program, infoLogLength[0], nil, infoLog)
+		local infoLog = ffi.new("GLchar[?]", infoLogLength[0])
+		C.glGetProgramInfoLog(program, infoLogLength[0], nil, infoLog)
 
-			error("Shader compilation failed: " .. ffi.string(infoLog))
+		error("Shader compilation failed: " .. ffi.string(infoLog))
+	end
+
+	return program
+end
+
+---@type fun(mask: number)
+gl.clear = C.glClear
+
+---@type fun(r: number, g: number, b: number, a: number)
+gl.clearColor = C.glClearColor
+
+---@type fun(x: number, y: number, width: number, height: number)
+gl.viewport = C.glViewport
+
+---@param n number
+---@return number[]
+gl.genProgramPipelines = function(n)
+	local handle = ffi.new("GLuint[?]", n)
+	C.glGenProgramPipelines(n, handle)
+
+	local pipelineIds = {}
+	for i = 0, n - 1 do
+		pipelineIds[i + 1] = handle[i]
+	end
+
+	return pipelineIds
+end
+
+---@type fun(pipeline: number, stages: number, program: number)
+gl.useProgramStages = C.glUseProgramStages
+
+---@type fun(pipeline: number)
+gl.bindProgramPipeline = C.glBindProgramPipeline
+
+---@type fun(program: number)
+gl.deleteProgram = C.glDeleteProgram
+
+---@type fun(n: number, pipelines: userdata)
+gl.deleteProgramPipelines = C.glDeleteProgramPipelines
+
+---@type fun(n: number, buffers: userdata)
+gl.createBuffers = C.glCreateBuffers
+
+---@type fun(buffer: number, size: number, data: userdata?, usage: number)
+gl.namedBufferData = C.glNamedBufferData
+
+---@type fun(buffer: number, offset: number, size: number, data: userdata)
+gl.namedBufferSubData = C.glNamedBufferSubData
+
+---@type fun(vaobj: number, bindingindex: number, buffer: number, offset: number, stride: number)
+gl.vertexArrayVertexBuffer = C.glVertexArrayVertexBuffer
+
+---@type fun(vaobj: number, buffer: number)
+gl.vertexArrayElementBuffer = C.glVertexArrayElementBuffer
+
+---@type fun(vaobj: number, attribindex: number)
+gl.enableVertexArrayAttrib = C.glEnableVertexArrayAttrib
+
+---@type fun(vaobj: number, attribindex: number, size: number, type: number, normalized: number, relativeoffset: number)
+gl.vertexArrayAttribFormat = C.glVertexArrayAttribFormat
+
+---@type fun(vaobj: number, attribindex: number, bindingindex: number)
+gl.vertexArrayAttribBinding = C.glVertexArrayAttribBinding
+
+---@type fun(array: number)
+gl.bindVertexArray = C.glBindVertexArray
+
+---@type fun(n: number, arrays: userdata)
+gl.createVertexArrays = C.glCreateVertexArrays
+
+---@type fun(mode: number, count: number, type: number, indices: userdata?)
+gl.drawElements = C.glDrawElements
+
+---@type fun(name: number): string
+gl.getString = function(name)
+	local str = C.glGetString(name)
+	return ffi.string(str)
+end
+
+---@type fun(pId: number, uId: number, v0: userdata)
+gl.programUniform1i = C.glProgramUniform1i
+
+---@type fun(pId: number, uId: number, v0: number)
+gl.programUniform1f = C.glProgramUniform1f
+
+---@type fun(pId: number, uId: number, v0: number, v1: number)
+gl.programUniform2i = C.glProgramUniform2i
+
+---@type fun(pId: number, uId: number, v0: number, v1: number)
+gl.programUniform2f = C.glProgramUniform2f
+
+---@type fun(pId: number, uId: number, v0: number, v1: number, v2: number)
+gl.programUniform3f = C.glProgramUniform3f
+
+---@type fun(pId: number, uId: number, v0: number, v1: number, v2: number, v3: number)
+gl.programUniform4f = C.glProgramUniform4f
+
+---@type fun(pId: number, uId: number, count: number, transpose: number, value: userdata)
+gl.programUniformMatrix4fv = C.glProgramUniformMatrix4fv
+
+---@type fun(target: number, n: number): number[]
+gl.createTextures = function(target, n)
+	local handle = ffi.new("GLuint[?]", n)
+	C.glCreateTextures(target, n, handle)
+
+	local textureIds = {}
+	for i = 0, n - 1 do
+		textureIds[i + 1] = handle[i]
+	end
+
+	return textureIds
+end
+
+---@type fun(texture: number, levels: number, internalformat: number, width: number)
+gl.textureStorage1D = C.glTextureStorage1D
+
+---@type fun(texture: number, level: number, xoffset: number, width: number, format: number, type: number, pixels: userdata)
+gl.textureSubImage1D = C.glTextureSubImage1D
+
+---@type fun(texture: number, levels: number, internalformat: number, width: number, height: number)
+gl.textureStorage2D = C.glTextureStorage2D
+
+---@type fun(texture: number, level: number, xoffset: number, yoffset: number, width: number, height: number, format: number, type: number, pixels: userdata)
+gl.textureSubImage2D = C.glTextureSubImage2D
+
+---@type fun(texture: number, levels: number, internalformat: number, width: number, height: number, depth: number)
+gl.textureStorage3D = C.glTextureStorage3D
+
+---@type fun(texture: number, level: number, xoffset: number, yoffset: number, zoffset: number, width: number, height: number, depth: number, format: number, type: number, pixels: userdata)
+gl.textureSubImage3D = C.glTextureSubImage3D
+
+---@type fun(unit: number, texture: number)
+gl.bindTextureUnit = C.glBindTextureUnit
+
+---@type fun(textures: number[])
+gl.deleteTextures = function(textures)
+	local n = #textures
+	local handle = ffi.new("GLuint[?]", n, textures)
+	C.glDeleteTextures(n, handle)
+end
+
+---@type fun(target: number, index: number, buffer: number)
+gl.bindBufferBase = C.glBindBufferBase
+
+---@type fun(num_groups_x: number, num_groups_y: number, num_groups_z: number)
+gl.dispatchCompute = C.glDispatchCompute
+
+---@type fun(barriers: number)
+gl.memoryBarrier = C.glMemoryBarrier
+
+---@type fun(cap: number)
+gl.enable = C.glEnable
+
+---@type fun(cap: number)
+gl.disable = C.glDisable
+
+---@type fun(sfactor: number, dfactor: number)
+gl.blendFunc = C.glBlendFunc
+
+---@type fun(unit: number, texture: number, level: number, layered: number, layer: number, access: number, format: number)
+gl.bindImageTexture = C.glBindImageTexture
+
+---@type fun()
+gl.finish = C.glFinish
+
+---@type fun()
+gl.flush = C.glFlush
+
+---@type fun(srcName: number, srcTarget: number, srcLevel: number, srcX: number, srcY: number, srcZ: number, dstName: number, dstTarget: number, dstLevel: number, dstX: number, dstY: number, dstZ: number, width: number, height: number, depth: number)
+gl.copyImageSubData = C.glCopyImageSubData
+
+---@type fun(func: number)
+gl.depthFunc = C.glDepthFunc
+
+---@type fun(flag: boolean)
+gl.depthMask = function(flag)
+	C.glDepthMask(flag and 1 or 0)
+end
+
+---@type fun(depth: number)
+gl.clearDepthf = C.glClearDepthf
+
+---@return number
+gl.createFramebuffer = function()
+	local fboId = ffi.new("GLuint[1]")
+	C.glCreateFramebuffers(1, fboId)
+	return fboId[0]
+end
+
+---@type fun(n: number, framebuffers: userdata)
+gl.createFramebuffers = C.glCreateFramebuffers
+
+---@type fun(framebuffer: number, attachment: number, texture: number, level: number)
+gl.namedFramebufferTexture = C.glNamedFramebufferTexture
+
+---@type fun(framebuffer: number, attachment: number, texture: number, level: number, layer: number)
+gl.namedFramebufferTextureLayer = C.glNamedFramebufferTextureLayer
+
+---@type fun(framebuffer: number, target: number): number
+gl.checkNamedFramebufferStatus = C.glCheckNamedFramebufferStatus
+
+---@type fun(target: number, framebuffer: number)
+gl.bindFramebuffer = C.glBindFramebuffer
+
+---@type fun(n: number, framebuffers: userdata)
+gl.deleteFramebuffers = C.glDeleteFramebuffers
+
+---@type fun(n: number): number[]
+gl.genSamplers = function(n)
+	local handle = ffi.new("GLuint[?]", n)
+	C.glGenSamplers(n, handle)
+
+	local samplerIds = {}
+	for i = 0, n - 1 do
+		samplerIds[i + 1] = handle[i]
+	end
+
+	return samplerIds
+end
+
+---@type fun(n: number, samplers: ffi.cdata*)
+gl.deleteSamplers = C.glDeleteSamplers
+
+---@type fun(sampler: number, pname: number, param: number)
+gl.samplerParameteri = C.glSamplerParameteri
+
+---@type fun(sampler: number, pname: number, param: number)
+gl.samplerParameterf = C.glSamplerParameterf
+
+---@type fun(unit: number, sampler: number)
+gl.bindSampler = C.glBindSampler
+
+---@alias gl.DebugMessageCallback fun(source: number, type: number, id: number, severity: number, length: number, message: string)
+
+---@type fun(callback: gl.DebugMessageCallback)
+gl.debugMessageCallback = function(callback)
+	local cCallback = ffi.cast(
+		"GLDEBUGPROC",
+		function(source, type, id, severity, length, message, _userParam)
+			callback(source, type, id, severity, length, ffi.string(message, length))
 		end
+	)
 
-		return program
-	end,
+	C.glDebugMessageCallback(cCallback, nil)
+end
 
-	---@type fun(mask: number)
-	clear = C.glClear,
+---@type fun(source: number, type: number, severity: number, count: number, ids: ffi.cdata*, enabled: number)
+gl.debugMessageControl = C.glDebugMessageControl
 
-	---@type fun(r: number, g: number, b: number, a: number)
-	clearColor = C.glClearColor,
+---@type fun(pname: number): number
+gl.getInteger = function(pname)
+	local data = ffi.new("GLint[1]")
+	C.glGetIntegerv(pname, data)
+	return data[0]
+end
 
-	---@type fun(x: number, y: number, width: number, height: number)
-	viewport = C.glViewport,
+---@type fun(): number
+gl.getError = C.glGetError
 
-	-- ---@type fun(n: number, pipelines: userdata)
-	-- genProgramPipelines = C.glGenProgramPipelines,
+---@type fun(id: number): boolean
+gl.isVertexArray = function(id)
+	return C.glIsVertexArray(id) ~= 0
+end
 
-	---@param n number
-	---@return number[]
-	genProgramPipelines = function(n)
-		local handle = ffi.new("GLuint[?]", n)
-		C.glGenProgramPipelines(n, handle)
+---@type fun(id: number): boolean
+gl.isBuffer = function(id)
+	return C.glIsBuffer(id) ~= 0
+end
 
-		local pipelineIds = {}
-		for i = 0, n - 1 do
-			pipelineIds[i + 1] = handle[i]
-		end
+---@type fun(pname: number, param: number)
+gl.pixelStorei = C.glPixelStorei
 
-		return pipelineIds
-	end,
-
-	---@type fun(pipeline: number, stages: number, program: number)
-	useProgramStages = C.glUseProgramStages,
-
-	---@type fun(pipeline: number)
-	bindProgramPipeline = C.glBindProgramPipeline,
-
-	---@type fun(program: number)
-	deleteProgram = C.glDeleteProgram,
-
-	---@type fun(n: number, pipelines: userdata)
-	deleteProgramPipelines = C.glDeleteProgramPipelines,
-
-	---@type fun(n: number, buffers: userdata)
-	createBuffers = C.glCreateBuffers,
-
-	---@type fun(buffer: number, size: number, data: userdata?, usage: number)
-	namedBufferData = C.glNamedBufferData,
-
-	---@type fun(buffer: number, offset: number, size: number, data: userdata)
-	namedBufferSubData = C.glNamedBufferSubData,
-
-	---@type fun(vaobj: number, bindingindex: number, buffer: number, offset: number, stride: number)
-	vertexArrayVertexBuffer = C.glVertexArrayVertexBuffer,
-	---@type fun(vaobj: number, buffer: number)
-	vertexArrayElementBuffer = C.glVertexArrayElementBuffer,
-	---@type fun(vaobj: number, attribindex: number)
-	enableVertexArrayAttrib = C.glEnableVertexArrayAttrib,
-	---@type fun(vaobj: number, attribindex: number, size: number, type: number, normalized: number, relativeoffset: number)
-	vertexArrayAttribFormat = C.glVertexArrayAttribFormat,
-	---@type fun(vaobj: number, attribindex: number, bindingindex: number)
-	vertexArrayAttribBinding = C.glVertexArrayAttribBinding,
-	---@type fun(array: number)
-	bindVertexArray = C.glBindVertexArray,
-	---@type fun(n: number, arrays: userdata)
-	createVertexArrays = C.glCreateVertexArrays,
-
-	---@type fun(mode: number, count: number, type: number, indices: userdata?)
-	drawElements = C.glDrawElements,
-
-	---@type fun(name: number): string
-	getString = function(name)
-		local str = C.glGetString(name)
-		return ffi.string(str)
-	end,
-
-	---@type fun(pId: number, uId: number, v0: userdata)
-	programUniform1i = C.glProgramUniform1i,
-
-	---@type fun(pId: number, uId: number, v0: number)
-	programUniform1f = C.glProgramUniform1f,
-
-	---@type fun(pId: number, uId: number, v0: number, v1: number)
-	programUniform2i = C.glProgramUniform2i,
-
-	---@type fun(pId: number, uId: number, v0: number, v1: number)
-	programUniform2f = C.glProgramUniform2f,
-
-	---@type fun(pId: number, uId: number, v0: number, v1: number, v2: number)
-	programUniform3f = C.glProgramUniform3f,
-
-	---@type fun(pId: number, uId: number, v0: number, v1: number, v2: number, v3: number)
-	programUniform4f = C.glProgramUniform4f,
-
-	---@type fun(pId: number, uId: number, count: number, transpose: number, value: userdata)
-	programUniformMatrix4fv = C.glProgramUniformMatrix4fv,
-
-	---@type fun(target: number, n: number): number[]
-	createTextures = function(target, n)
-		local handle = ffi.new("GLuint[?]", n)
-		C.glCreateTextures(target, n, handle)
-
-		local textureIds = {}
-		for i = 0, n - 1 do
-			textureIds[i + 1] = handle[i]
-		end
-
-		return textureIds
-	end,
-
-	---@type fun(texture: number, levels: number, internalformat: number, width: number)
-	textureStorage1D = C.glTextureStorage1D,
-
-	---@type fun(texture: number, level: number, xoffset: number, width: number, format: number, type: number, pixels: userdata)
-	textureSubImage1D = C.glTextureSubImage1D,
-
-	---@type fun(texture: number, levels: number, internalformat: number, width: number, height: number)
-	textureStorage2D = C.glTextureStorage2D,
-
-	---@type fun(texture: number, level: number, xoffset: number, yoffset: number, width: number, height: number, format: number, type: number, pixels: userdata)
-	textureSubImage2D = C.glTextureSubImage2D,
-
-	---@type fun(texture: number, levels: number, internalformat: number, width: number, height: number, depth: number)
-	textureStorage3D = C.glTextureStorage3D,
-
-	---@type fun(texture: number, level: number, xoffset: number, yoffset: number, zoffset: number, width: number, height: number, depth: number, format: number, type: number, pixels: userdata)
-	textureSubImage3D = C.glTextureSubImage3D,
-
-
-	---@type fun(unit: number, texture: number)
-	bindTextureUnit = C.glBindTextureUnit,
-
-	---@type fun(textures: number[])
-	deleteTextures = function(textures)
-		local n = #textures
-		local handle = ffi.new("GLuint[?]", n, textures)
-		C.glDeleteTextures(n, handle)
-	end,
-
-	---@type fun(target: number, index: number, buffer: number)
-	bindBufferBase = C.glBindBufferBase,
-
-	---@type fun(num_groups_x: number, num_groups_y: number, num_groups_z: number)
-	dispatchCompute = C.glDispatchCompute,
-
-	---@type fun(barriers: number)
-	memoryBarrier = C.glMemoryBarrier,
-
-	---@type fun(cap: number)
-	enable = C.glEnable,
-
-	---@type fun(cap: number)
-	disable = C.glDisable,
-
-	---@type fun(sfactor: number, dfactor: number)
-	blendFunc = C.glBlendFunc,
-
-	---@type fun(unit: number, texture: number, level: number, layered: number, layer: number, access: number, format: number)
-	bindImageTexture = C.glBindImageTexture,
-
-	---@type fun()
-	finish = C.glFinish,
-
-	---@type fun()
-	flush = C.glFlush,
-
-	---@type fun(srcName: number, srcTarget: number, srcLevel: number, srcX: number, srcY: number, srcZ: number, dstName: number, dstTarget: number, dstLevel: number, dstX: number, dstY: number, dstZ: number, width: number, height: number, depth: number)
-	copyImageSubData = C.glCopyImageSubData,
-
-	---@type fun(func: number)
-	depthFunc = C.glDepthFunc,
-
-	---@type fun(flag: boolean)
-	depthMask = function(flag)
-		C.glDepthMask(flag and 1 or 0)
-	end,
-
-	---@type fun(depth: number)
-	clearDepthf = C.glClearDepthf,
-
-	---@return number
-	createFramebuffer = function()
-		local fboId = ffi.new("GLuint[1]")
-		C.glCreateFramebuffers(1, fboId)
-		return fboId[0]
-	end,
-
-	---@type fun(n: number, framebuffers: userdata)
-	createFramebuffers = C.glCreateFramebuffers,
-
-	---@type fun(framebuffer: number, attachment: number, texture: number, level: number)
-	namedFramebufferTexture = C.glNamedFramebufferTexture,
-
-	---@type fun(framebuffer: number, attachment: number, texture: number, level: number, layer: number)
-	namedFramebufferTextureLayer = C.glNamedFramebufferTextureLayer,
-
-	---@type fun(framebuffer: number, target: number): number
-	checkNamedFramebufferStatus = C.glCheckNamedFramebufferStatus,
-
-	---@type fun(target: number, framebuffer: number)
-	bindFramebuffer = C.glBindFramebuffer,
-
-	---@type fun(n: number, framebuffers: userdata)
-	deleteFramebuffers = C.glDeleteFramebuffers,
-
-	---@type fun(n: number): number[]
-	genSamplers = function(n)
-		local handle = ffi.new("GLuint[?]", n)
-		C.glGenSamplers(n, handle)
-
-		local samplerIds = {}
-		for i = 0, n - 1 do
-			samplerIds[i + 1] = handle[i]
-		end
-
-		return samplerIds
-	end,
-
-	---@type fun(n: number, samplers: ffi.cdata*)
-	deleteSamplers = C.glDeleteSamplers,
-
-	---@type fun(sampler: number, pname: number, param: number)
-	samplerParameteri = C.glSamplerParameteri,
-
-	---@type fun(sampler: number, pname: number, param: number)
-	samplerParameterf = C.glSamplerParameterf,
-
-	---@type fun(unit: number, sampler: number)
-	bindSampler = C.glBindSampler,
-
-	---@alias gl.DebugMessageCallback fun(source: number, type: number, id: number, severity: number, length: number, message: string)
-
-	---@type fun(callback: gl.DebugMessageCallback)
-	debugMessageCallback = function(callback)
-		local cCallback = ffi.cast(
-			"GLDEBUGPROC",
-			function(source, type, id, severity, length, message, _userParam)
-				callback(source, type, id, severity, length, ffi.string(message, length))
-			end
-		)
-
-		C.glDebugMessageCallback(cCallback, nil)
-	end,
-
-	---@type fun(source: number, type: number, severity: number, count: number, ids: ffi.cdata*, enabled: number)
-	debugMessageControl = C.glDebugMessageControl,
-
-	---@type fun(pname: number): number
-	getInteger = function(pname)
-		local data = ffi.new("GLint[1]")
-		C.glGetIntegerv(pname, data)
-		return data[0]
-	end,
-
-	---@type fun(): number
-	getError = C.glGetError,
-
-	---@type fun(id: number): boolean
-	isVertexArray = function(id)
-		return C.glIsVertexArray(id) ~= 0
-	end,
-
-	---@type fun(id: number): boolean
-	isBuffer = function(id)
-		return C.glIsBuffer(id) ~= 0
-	end,
-
-	---@type fun(pname: number, param: number)
-	pixelStorei = C.glPixelStorei
-}
+return gl
