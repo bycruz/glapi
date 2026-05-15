@@ -88,6 +88,8 @@ local nonCoreFnDefs = {
 	glCullFace = "void(*)(GLenum)",
 	glFrontFace = "void(*)(GLenum)",
 
+	glDrawArrays = "void(*)(GLenum, GLint, GLsizei)",
+
 	glDebugMessageCallback = "void(*)(GLDEBUGPROC, const void*)",
 	glDebugMessageControl = "void(*)(GLenum, GLenum, GLenum, GLsizei, const GLuint*, unsigned char)",
 }
@@ -234,6 +236,9 @@ gl.createVertexArrays = C.glCreateVertexArrays
 
 ---@type fun(mode: number, count: number, type: number, indices: ffi.cdata*?)
 gl.drawElements = C.glDrawElements
+
+---@type fun(mode: number, first: number, count: number)
+gl.drawArrays = C.glDrawArrays
 
 ---@type fun(name: number): string
 gl.getString = function(name)
