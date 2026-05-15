@@ -13,6 +13,7 @@ gl.Constants = {
 	TextureMaxAnisotropy = 0x84FE,
 	Framebuffer = 0x8D40,
 	ColorAttachment0 = 0x8CE0,
+	DepthAttachment = 0x8D00,
 	FramebufferComplete = 0x8CD5,
 	SyncGpuCommandsComplete = 0x9117,
 	SyncFlushCommandsBit = 0x00000001
@@ -95,8 +96,55 @@ gl.TextureTarget = {
 
 ---@enum gl.InternalFormat
 gl.InternalFormat = {
+	R8 = 0x8229,
+	R16 = 0x822A,
+	R16F = 0x822D,
+	R32F = 0x822E,
+	R8I = 0x8231,
+	R8UI = 0x8232,
+	R16I = 0x8233,
+	R16UI = 0x8234,
+	R32I = 0x8235,
+	R32UI = 0x8236,
+	Rg8 = 0x822B,
+	Rg16 = 0x822C,
+	Rg16F = 0x822F,
+	Rg32F = 0x8230,
+	Rg8I = 0x8237,
+	Rg8UI = 0x8238,
+	Rg16I = 0x8239,
+	Rg16UI = 0x823A,
+	Rg32I = 0x823B,
+	Rg32UI = 0x823C,
+	Rgb8 = 0x8051,
+	Rgb16 = 0x8054,
+	Rgb16F = 0x881B,
+	Rgb32F = 0x8815,
+	Rgb8I = 0x8D8F,
+	Rgb8UI = 0x8D7D,
+	Rgb16I = 0x8D89,
+	Rgb16UI = 0x8D77,
+	Rgb32I = 0x8D83,
+	Rgb32UI = 0x8D71,
 	Rgba8 = 0x8058,
-	DepthComponent24 = 0x81A6
+	Rgba16 = 0x805B,
+	Rgba16F = 0x881A,
+	Rgba32F = 0x8814,
+	Rgba8I = 0x8D8E,
+	Rgba8UI = 0x8D7C,
+	Rgba16I = 0x8D88,
+	Rgba16UI = 0x8D76,
+	Rgba32I = 0x8D82,
+	Rgba32UI = 0x8D70,
+	Srgb8 = 0x8C41,
+	Srgb8Alpha8 = 0x8C43,
+	R11fG11fB10f = 0x8C3A,
+	Rgb9E5 = 0x8C3D,
+	DepthComponent16 = 0x81A5,
+	DepthComponent24 = 0x81A6,
+	DepthComponent32f = 0x8CAC,
+	Depth24Stencil8 = 0x88F0,
+	Depth32fStencil8 = 0x8CAD
 }
 
 ---@enum gl.PixelFormat
@@ -291,6 +339,7 @@ do
 
 	gl.FRAMEBUFFER = gl.Constants.Framebuffer
 	gl.COLOR_ATTACHMENT0 = gl.Constants.ColorAttachment0
+	gl.DEPTH_ATTACHMENT = gl.Constants.DepthAttachment
 	gl.FRAMEBUFFER_COMPLETE = gl.Constants.FramebufferComplete
 
 	gl.UNPACK_ALIGNMENT = gl.UnpackParam.UnpackAlignment

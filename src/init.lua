@@ -83,6 +83,8 @@ local nonCoreFnDefs = {
 
 	glClearDepthf = "void(*)(GLfloat)",
 
+	glDrawBuffers = "void(*)(GLsizei, const GLenum*)",
+
 	glCullFace = "void(*)(GLenum)",
 	glFrontFace = "void(*)(GLenum)",
 
@@ -375,6 +377,9 @@ gl.bindFramebuffer = C.glBindFramebuffer
 
 ---@type fun(n: number, framebuffers: ffi.cdata*)
 gl.deleteFramebuffers = C.glDeleteFramebuffers
+
+---@type fun(n: number, bufs: ffi.cdata*)
+gl.drawBuffers = C.glDrawBuffers
 
 ---@type fun(n: number): number[]
 gl.genSamplers = function(n)
