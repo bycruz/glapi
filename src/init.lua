@@ -83,6 +83,9 @@ local nonCoreFnDefs = {
 
 	glClearDepthf = "void(*)(GLfloat)",
 
+	glCullFace = "void(*)(GLenum)",
+	glFrontFace = "void(*)(GLenum)",
+
 	glDebugMessageCallback = "void(*)(GLDEBUGPROC, const void*)",
 	glDebugMessageControl = "void(*)(GLenum, GLenum, GLenum, GLsizei, const GLuint*, unsigned char)",
 }
@@ -315,6 +318,12 @@ gl.enable = C.glEnable
 
 ---@type fun(cap: number)
 gl.disable = C.glDisable
+
+---@type fun(mode: number)
+gl.cullFace = C.glCullFace
+
+---@type fun(mode: number)
+gl.frontFace = C.glFrontFace
 
 ---@type fun(sfactor: number, dfactor: number)
 gl.blendFunc = C.glBlendFunc
