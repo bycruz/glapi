@@ -37,6 +37,19 @@ gl.Capability = {
 	CullFace = 0x0B44
 }
 
+---@enum gl.CullMode
+gl.CullMode = {
+	Front = 0x0404,
+	Back = 0x0405,
+	FrontAndBack = 0x0408
+}
+
+---@enum gl.FrontFace
+gl.FrontFace = {
+	Cw = 0x0900,
+	Ccw = 0x0901
+}
+
 ---@enum gl.DrawMode
 gl.DrawMode = {
 	StaticDraw = 0x88E4,
@@ -291,6 +304,13 @@ do
 	gl.PIXEL_PACK_BUFFER = gl.BufferTarget.PixelPackBuffer
 
 	gl.CULL_FACE = gl.Capability.CullFace
+
+	gl.FRONT = gl.CullMode.Front
+	gl.BACK = gl.CullMode.Back
+	gl.FRONT_AND_BACK = gl.CullMode.FrontAndBack
+
+	gl.CW = gl.FrontFace.Cw
+	gl.CCW = gl.FrontFace.Ccw
 end
 
 return gl
