@@ -69,6 +69,7 @@ local nonCoreFnDefs = {
 	glBindFramebuffer = "void(*)(GLenum, GLuint)",
 	glNamedFramebufferTexture = "void(*)(GLuint, GLenum, GLuint, GLint)",
 	glNamedFramebufferTextureLayer = "void(*)(GLuint, GLenum, GLuint, GLint, GLint)",
+	glNamedFramebufferDrawBuffer = "void(*)(GLuint, GLenum)",
 	glCheckNamedFramebufferStatus = "GLenum(*)(GLuint, GLenum)",
 	glDeleteFramebuffers = "void(*)(GLsizei, const GLuint*)",
 
@@ -386,6 +387,9 @@ gl.namedFramebufferTexture = C.glNamedFramebufferTexture
 
 ---@type fun(framebuffer: number, attachment: number, texture: number, level: number, layer: number)
 gl.namedFramebufferTextureLayer = C.glNamedFramebufferTextureLayer
+
+---@type fun(framebuffer: number, buf: number)
+gl.namedFramebufferDrawBuffer = C.glNamedFramebufferDrawBuffer
 
 ---@type fun(framebuffer: number, target: number): number
 gl.checkNamedFramebufferStatus = C.glCheckNamedFramebufferStatus
