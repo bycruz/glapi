@@ -149,9 +149,27 @@ gl.InternalFormat = {
 
 ---@enum gl.PixelFormat
 gl.PixelFormat = {
+	Red = 0x1903,
+	Green = 0x1904,
+	Blue = 0x1905,
+	Alpha = 0x1906,
 	Rg = 0x8227,
 	Rgb = 0x1907,
-	Rgba = 0x1908
+	Bgr = 0x80E0,
+	Rgba = 0x1908,
+	Bgra = 0x80E1,
+	RgInteger = 0x8228,
+	RedInteger = 0x8D94,
+	GreenInteger = 0x8D95,
+	BlueInteger = 0x8D96,
+	AlphaInteger = 0x8D97,
+	RgbInteger = 0x8D98,
+	RgbaInteger = 0x8D99,
+	BgrInteger = 0x8D9A,
+	BgraInteger = 0x8D9B,
+	DepthComponent = 0x1902,
+	DepthStencil = 0x84F9,
+	StencilIndex = 0x1901
 }
 
 ---@enum gl.TextureWrap
@@ -298,7 +316,24 @@ do
 	gl.RG = gl.PixelFormat.Rg
 	gl.RGB = gl.PixelFormat.Rgb
 	gl.RGBA = gl.PixelFormat.Rgba
-
+	gl.BGR = gl.PixelFormat.Bgr
+	gl.BGRA = gl.PixelFormat.Bgra
+	gl.RED = gl.PixelFormat.Red
+	gl.GREEN = gl.PixelFormat.Green
+	gl.BLUE = gl.PixelFormat.Blue
+	gl.ALPHA = gl.PixelFormat.Alpha
+	gl.RG_INTEGER = gl.PixelFormat.RgInteger
+	gl.RED_INTEGER = gl.PixelFormat.RedInteger
+	gl.GREEN_INTEGER = gl.PixelFormat.GreenInteger
+	gl.BLUE_INTEGER = gl.PixelFormat.BlueInteger
+	gl.ALPHA_INTEGER = gl.PixelFormat.AlphaInteger
+	gl.RGB_INTEGER = gl.PixelFormat.RgbInteger
+	gl.RGBA_INTEGER = gl.PixelFormat.RgbaInteger
+	gl.BGR_INTEGER = gl.PixelFormat.BgrInteger
+	gl.BGRA_INTEGER = gl.PixelFormat.BgraInteger
+	gl.DEPTH_COMPONENT = gl.PixelFormat.DepthComponent
+	gl.DEPTH_STENCIL = gl.PixelFormat.DepthStencil
+	gl.STENCIL_INDEX = gl.PixelFormat.StencilIndex
 	gl.TEXTURE_WRAP_S = gl.TextureWrap.TextureWrapS
 	gl.TEXTURE_WRAP_T = gl.TextureWrap.TextureWrapT
 	gl.TEXTURE_WRAP_R = gl.TextureWrap.TextureWrapR
