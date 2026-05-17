@@ -201,6 +201,18 @@ gl.BarrierBit = {
 	AllBarrierBits = 0xFFFFFFFF
 }
 
+---@enum gl.MapBit
+gl.MapBit = {
+	Read = 0x0001,
+	Write = 0x0002,
+	InvalidateRange = 0x0004,
+	InvalidateBuffer = 0x0008,
+	FlushExplicit = 0x0010,
+	Unsynchronized = 0x0020,
+	Persistent = 0x0040,
+	Coherent = 0x0080
+}
+
 ---@enum gl.BlendFactor
 gl.BlendFactor = {
 	SrcAlpha = 0x0302,
@@ -360,6 +372,15 @@ do
 
 	gl.CW = gl.FrontFace.Cw
 	gl.CCW = gl.FrontFace.Ccw
+
+	gl.MAP_READ_BIT = gl.MapBit.Read
+	gl.MAP_WRITE_BIT = gl.MapBit.Write
+	gl.MAP_INVALIDATE_RANGE_BIT = gl.MapBit.InvalidateRange
+	gl.MAP_INVALIDATE_BUFFER_BIT = gl.MapBit.InvalidateBuffer
+	gl.MAP_FLUSH_EXPLICIT_BIT = gl.MapBit.FlushExplicit
+	gl.MAP_UNSYNCHRONIZED_BIT = gl.MapBit.Unsynchronized
+	gl.MAP_PERSISTENT_BIT = gl.MapBit.Persistent
+	gl.MAP_COHERENT_BIT = gl.MapBit.Coherent
 end
 
 return gl
