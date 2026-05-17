@@ -45,6 +45,8 @@ local nonCoreFnDefs = {
 	glBindBuffer = "void(*)(GLenum, GLuint)",
 	glNamedBufferData = "void(*)(GLuint, GLsizeiptr, const void*, GLenum)",
 	glNamedBufferSubData = "void(*)(GLuint, GLintptr, GLsizeiptr, const void*)",
+	glUnmapNamedBuffer = "GLboolean(*)(GLuint)",
+	glMapNamedBufferRange = "void*(*)(GLuint, GLintptr, GLsizeiptr, unsigned int)",
 
 	glCreateTextures = "void(*)(GLenum, GLsizei, GLuint*)",
 	glTextureStorage1D = "void(*)(GLuint, GLsizei, GLenum, GLsizei)",
@@ -205,13 +207,24 @@ gl.createBuffers = C.glCreateBuffers
 gl.namedBufferData = C.glNamedBufferData
 
 ---@type fun(n: number, buffers: ffi.cdata*)
-gl.destroyBuffers = C.glDeleteBuffers
+gl.deleteBuffers = C.glDeleteBuffers
+
+---@deprecated
+gl.destroyBuffers = gl.deleteBuffers
 
 ---@type fun(target: number, buffer: number)
 gl.bindBuffer = C.glBindBuffer
 
 ---@type fun(buffer: number, offset: number, size: number, data: ffi.cdata*)
 gl.namedBufferSubData = C.glNamedBufferSubData
+
+---@type fun(buffer: number): boolean
+gl.unmapNamedBuffer = function(buffer)
+	return C.glUnmapNamedBuffer(buffer) ~= 0
+end
+
+---@type fun(buffer: number, offset: number, length: number, access: number): ffi.cdata*
+gl.mapNamedBufferRange = C.glMapNamedBufferRange
 
 ---@type fun(vaobj: number, bindingindex: number, buffer: number, offset: number, stride: number)
 gl.vertexArrayVertexBuffer = C.glVertexArrayVertexBuffer
