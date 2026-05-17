@@ -102,6 +102,8 @@ local nonCoreFnDefs = {
 
 	glDrawElementsBaseVertex = "void(*)(GLenum, GLsizei, GLenum, const void*, GLint)",
 
+	glClipControl = "void(*)(GLenum, GLenum)",
+
 	glDebugMessageCallback = "void(*)(GLDEBUGPROC, const void*)",
 	glDebugMessageControl = "void(*)(GLenum, GLenum, GLenum, GLsizei, const GLuint*, unsigned char)",
 }
@@ -265,6 +267,9 @@ gl.drawArrays = C.glDrawArrays
 
 ---@type fun(mode: number, count: number, type: number, indices: ffi.cdata*?, basevertex: number)
 gl.drawElementsBaseVertex = C.glDrawElementsBaseVertex
+
+---@type fun(origin: gl.ClipOrigin, depth: number)
+gl.clipControl = C.glClipControl
 
 ---@type fun(name: number): string
 gl.getString = function(name)

@@ -45,6 +45,18 @@ gl.CullMode = {
 	FrontAndBack = 0x0408
 }
 
+---@enum gl.ClipOrigin
+gl.ClipOrigin = {
+	LowerLeft = 0x8CA1,
+	UpperLeft = 0x8CA2
+}
+
+---@enum gl.ClipDepth
+gl.ClipDepth = {
+	NegativeOneToOne = 0x935E,
+	ZeroToOne = 0x935F
+}
+
 ---@enum gl.FrontFace
 gl.FrontFace = {
 	Cw = 0x0900,
@@ -407,6 +419,11 @@ do
 
 	gl.CW = gl.FrontFace.Cw
 	gl.CCW = gl.FrontFace.Ccw
+
+	gl.LOWER_LEFT = gl.ClipOrigin.LowerLeft
+	gl.UPPER_LEFT = gl.ClipOrigin.UpperLeft
+	gl.NEGATIVE_ONE_TO_ONE = gl.ClipDepth.NegativeOneToOne
+	gl.ZERO_TO_ONE = gl.ClipDepth.ZeroToOne
 
 	gl.MAP_READ_BIT = gl.MapBit.Read
 	gl.MAP_WRITE_BIT = gl.MapBit.Write
