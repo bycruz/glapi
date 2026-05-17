@@ -71,6 +71,12 @@ local nonCoreFnDefs = {
 	glNamedFramebufferTextureLayer = "void(*)(GLuint, GLenum, GLuint, GLint, GLint)",
 	glNamedFramebufferDrawBuffer = "void(*)(GLuint, GLenum)",
 	glCheckNamedFramebufferStatus = "GLenum(*)(GLuint, GLenum)",
+	glIsFramebuffer = "GLboolean(*)(GLuint)",
+	glIsProgram = "GLboolean(*)(GLuint)",
+	glIsShader = "GLboolean(*)(GLuint)",
+	glIsTexture = "GLboolean(*)(GLuint)",
+	glIsSampler = "GLboolean(*)(GLuint)",
+	glIsRenderbuffer = "GLboolean(*)(GLuint)",
 	glDeleteFramebuffers = "void(*)(GLsizei, const GLuint*)",
 
 	glGenSamplers = "void(*)(GLsizei, GLuint*)",
@@ -399,6 +405,36 @@ gl.bindFramebuffer = C.glBindFramebuffer
 
 ---@type fun(n: number, framebuffers: ffi.cdata*)
 gl.deleteFramebuffers = C.glDeleteFramebuffers
+
+---@type fun(id: number): boolean
+gl.isFramebuffer = function(id)
+	return C.glIsFramebuffer(id) ~= 0
+end
+
+---@type fun(id: number): boolean
+gl.isProgram = function(id)
+	return C.glIsProgram(id) ~= 0
+end
+
+---@type fun(id: number): boolean
+gl.isShader = function(id)
+	return C.glIsShader(id) ~= 0
+end
+
+---@type fun(id: number): boolean
+gl.isTexture = function(id)
+	return C.glIsTexture(id) ~= 0
+end
+
+---@type fun(id: number): boolean
+gl.isSampler = function(id)
+	return C.glIsSampler(id) ~= 0
+end
+
+---@type fun(id: number): boolean
+gl.isRenderbuffer = function(id)
+	return C.glIsRenderbuffer(id) ~= 0
+end
 
 ---@type fun(n: number, bufs: ffi.cdata*)
 gl.drawBuffers = C.glDrawBuffers
