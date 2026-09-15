@@ -102,6 +102,20 @@ local nonCoreFnDefs = {
 
 	glDrawElementsBaseVertex = "void(*)(GLenum, GLsizei, GLenum, const void*, GLint)",
 
+	glDrawElementsInstanced = "void(*)(GLenum, GLsizei, GLenum, const void*, GLsizei)",
+	glDrawArraysInstanced = "void(*)(GLenum, GLint, GLsizei, GLsizei)",
+
+	-- Instance count and base vertex in one call, so an indexed instanced draw
+	-- does not have to choose between them.
+	glDrawElementsInstancedBaseVertex = "void(*)(GLenum, GLsizei, GLenum, const void*, GLsizei, GLint)",
+
+	-- Divisor 0 means one element per vertex, 1 means one element per instance.
+	-- The direct-state-access form is the one that matches the rest of the VAO
+	-- calls here; glVertexAttribDivisor is the older form that acts on whatever
+	-- VAO happens to be bound.
+	glVertexArrayBindingDivisor = "void(*)(GLuint, GLuint, GLuint)",
+	glVertexAttribDivisor = "void(*)(GLuint, GLuint)",
+
 	glClipControl = "void(*)(GLenum, GLenum)",
 
 	glDebugMessageCallback = "void(*)(GLDEBUGPROC, const void*)",
@@ -267,6 +281,21 @@ gl.drawArrays = C.glDrawArrays
 
 ---@type fun(mode: number, count: number, type: number, indices: ffi.cdata*?, basevertex: number)
 gl.drawElementsBaseVertex = C.glDrawElementsBaseVertex
+
+---@type fun(mode: number, count: number, type: number, indices: ffi.cdata*?, instancecount: number)
+gl.drawElementsInstanced = C.glDrawElementsInstanced
+
+---@type fun(mode: number, first: number, count: number, instancecount: number)
+gl.drawArraysInstanced = C.glDrawArraysInstanced
+
+---@type fun(mode: number, count: number, type: number, indices: ffi.cdata*?, instancecount: number, basevertex: number)
+gl.drawElementsInstancedBaseVertex = C.glDrawElementsInstancedBaseVertex
+
+---@type fun(vaobj: number, bindingindex: number, divisor: number)
+gl.vertexArrayBindingDivisor = C.glVertexArrayBindingDivisor
+
+---@type fun(index: number, divisor: number)
+gl.vertexAttribDivisor = C.glVertexAttribDivisor
 
 ---@type fun(origin: gl.ClipOrigin, depth: number)
 gl.clipControl = C.glClipControl
