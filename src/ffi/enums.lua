@@ -220,7 +220,8 @@ gl.TextureLodRange = {
 gl.BufferTarget = {
 	UniformBuffer = 0x8A11,
 	ShaderStorageBuffer = 0x90D2,
-	PixelPackBuffer = 0x88EB
+	PixelPackBuffer = 0x88EB,
+	DrawIndirectBuffer = 0x8F3F
 }
 
 ---@enum gl.BarrierBit
@@ -370,6 +371,7 @@ do
 
 	gl.UNIFORM_BUFFER = gl.BufferTarget.UniformBuffer
 	gl.SHADER_STORAGE_BUFFER = gl.BufferTarget.ShaderStorageBuffer
+	gl.DRAW_INDIRECT_BUFFER = gl.BufferTarget.DrawIndirectBuffer
 
 	gl.SHADER_STORAGE_BARRIER_BIT = gl.BarrierBit.ShaderStorageBarrierBit
 	gl.BUFFER_UPDATE_BARRIER_BIT = gl.BarrierBit.BufferUpdateBarrierBit

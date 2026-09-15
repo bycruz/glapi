@@ -103,6 +103,11 @@ local nonCoreFnDefs = {
 	glDrawElementsBaseVertex = "void(*)(GLenum, GLsizei, GLenum, const void*, GLint)",
 
 	glDrawElementsInstanced = "void(*)(GLenum, GLsizei, GLenum, const void*, GLsizei)",
+
+	-- Draw parameters read from the buffer bound to GL_DRAW_INDIRECT_BUFFER,
+	-- which uses the same five-uint32 layout as Vulkan's indirect commands.
+	glDrawElementsIndirect = "void(*)(GLenum, GLenum, const void*)",
+	glMultiDrawElementsIndirect = "void(*)(GLenum, GLenum, const void*, GLsizei, GLsizei)",
 	glDrawArraysInstanced = "void(*)(GLenum, GLint, GLsizei, GLsizei)",
 
 	-- Instance count and base vertex in one call, so an indexed instanced draw
@@ -284,6 +289,12 @@ gl.drawElementsBaseVertex = C.glDrawElementsBaseVertex
 
 ---@type fun(mode: number, count: number, type: number, indices: ffi.cdata*?, instancecount: number)
 gl.drawElementsInstanced = C.glDrawElementsInstanced
+
+---@type fun(mode: number, type: number, indirect: ffi.cdata*?)
+gl.drawElementsIndirect = C.glDrawElementsIndirect
+
+---@type fun(mode: number, type: number, indirect: ffi.cdata*?, drawcount: number, stride: number)
+gl.multiDrawElementsIndirect = C.glMultiDrawElementsIndirect
 
 ---@type fun(mode: number, first: number, count: number, instancecount: number)
 gl.drawArraysInstanced = C.glDrawArraysInstanced
