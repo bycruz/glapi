@@ -82,7 +82,12 @@ gl.DataType = {
 	UnsignedInt = 0x1405,
 	UnsignedShort = 0x1403,
 	Int = 0x1404,
-	UnsignedByte = 0x1401
+	UnsignedByte = 0x1401,
+	-- The signed and half float types are what packed vertex attributes read
+	-- as, alongside the unsigned ones above.
+	Byte = 0x1400,
+	Short = 0x1402,
+	HalfFloat = 0x140B
 }
 
 ---@enum gl.PrimitiveType
@@ -310,6 +315,9 @@ do
 	gl.UNSIGNED_SHORT = gl.DataType.UnsignedShort
 	gl.INT = gl.DataType.Int
 	gl.UNSIGNED_BYTE = gl.DataType.UnsignedByte
+	gl.BYTE = gl.DataType.Byte
+	gl.SHORT = gl.DataType.Short
+	gl.HALF_FLOAT = gl.DataType.HalfFloat
 
 	gl.TRIANGLES = gl.PrimitiveType.Triangles
 
