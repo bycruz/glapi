@@ -10,5 +10,5 @@ Cross-platform low level OpenGL bindings for LuaJIT.
 Use this package with the [lde](https://lde.sh/) package manager.
 
 ```bash
-lde add --git https://github.com/bycruz/glapi
+lde add glapi
 ```
